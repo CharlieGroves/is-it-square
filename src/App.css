@@ -1,38 +1,226 @@
-.App {
-  text-align: center;
+:root {
+  --bg-colour-100: #99aab5;
+  --bg-colour-300: #2c2f33;
+  --bg-colour-600: #23272a;
+  --text-colour: #ffffff;
+  --highlight-colour: #7289da;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.btn-highlight, Link {
+  background-color: var(--highlight-colour)!important;
+  border: 0!important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.background-600 {
+  background-color: var(--bg-colour-600)!important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  background-color: var(--bg-colour-300)!important;
+}
+
+.text-white {
+  color: var(--text-colour)!important;
+}
+
+.form-control {
+  box-shadow: none!important;
+}
+
+:root {
+  --bg-colour-100: #99aab5;
+  --bg-colour-300: #2c2f33;
+  --bg-colour-600: #23272a;
+  --text-colour: #ffffff;
+  --highlight-colour: #7289da;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.text-white {
+  color: var(--text-colour)!important;
+}
+
+Navbar {
+  background-color: var(--bg-colour-600) !important;
+}
+
+.message,
+.username {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  flex-flow: column wrap;
+}
+
+.message .message-container {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  max-width: 100%;
+}
+.sent,
+.received {
+  padding-bottom: 0.35rem;
+}
+
+.sent {
+  flex-direction: row-reverse;
+  margin-right: 10px;
+  margin-left: 15%;
+}
+
+.received {
+  flex-direction: row;
+  margin-left: 10px;
+  margin-right: 15%;
+}
+
+.received strong {
+  margin-left: 0.3rem;
+}
+
+.received .message-container,
+.sent .message-container {
+  background-color: var(--bg-colour-100) !important;
+  border-radius: 25px;
+  padding: 10px 20px;
+}
+
+.link {
+  background-color: var(--highlight-colour) !important;
+  color: var(--bg-colour-600) !important;
+}
+
+Button {
+  background-color: var(--highlight-colour);
+}
+
+.message-container,
+Button {
+  color: var(--bg-colour-600) !important;
+}
+
+span,
+strong {
+  color: var(--text-colour);
+}
+
+section {
+  background-color: var(--bg-colour-300) !important;
+}
+
+.form-control {
+  background-color: var(--bg-colour-600) !important;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.cancel-link {
+  text-decoration: none;
+  color: var(--text-colour);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.cancel-link:hover {
+  text-decoration: none !important;
+  color: var(--text-colour);
+}
+
+.formScroll::-webkit-scrollbar {
+  width: 20px;
+  background: var(--bg-colour-100);
+}
+
+.formScroll::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px var(--bg-colour-100);
+  border-radius: 10px;
+}
+
+.formScroll::-webkit-scrollbar-thumb {
+  background-color: var(bg-colour-600);
+  border-radius: 10px;
+  outline: 1px solid var(--bg-colour-600);
+}
+
+@media only screen and (min-width: 100px) and (max-width: 1281px) {
+  .mobile-padding {
+    padding-bottom: 5.25rem;
   }
-  to {
-    transform: rotate(360deg);
-  }
+}
+
+.menu-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-trigger {
+  background: var(--bg-colour-100);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  margin: 0;
+  padding: 0;
+  margin-left: auto; /* Strictly for positioning */
+}
+
+.menu-trigger span {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.menu-trigger img {
+  border-radius: 90px;
+}
+
+.menu {
+  background: var(--bg-colour-100);
+  border-radius: 8px;
+  position: absolute;
+  width: auto;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+}
+
+.menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.menu ul {
+  list-style: none;
+  width: fit-content;
+  height: fit-content;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #333333;
+  padding: 10px 20px;
+  display: block;
+  cursor: pointer;
+}
+
+div .limit-top {
+  height: 82vh !important;
+  width: 100vw !important;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+
+.yes-no-container {
+  display: flex;
 }
