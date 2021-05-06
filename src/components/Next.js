@@ -52,15 +52,7 @@ export default function Next() {
     const userRef = firestore.collection("users");
 
     await userRef.doc(uid).set({
-      username: displayName,
-      id: uid,
-      url: uid,
-      description: "",
-      followers: [],
-      following: [],
-      likes: [],
-      reactions: [],
-      admin: false,
+      scores: []
     });
 
     setLoading(false);
