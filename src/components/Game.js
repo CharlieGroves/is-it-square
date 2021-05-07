@@ -31,16 +31,17 @@ export default function Game() {
   const [randomNumber, setRandomNumber] = useState(newRandom());
   const [lives, setLives] = useState(3);
   const [dead, setDead] = useState(false);
-
   const { uid, email, displayName } = auth.currentUser;
   const userRef = firestore.collection("scores").doc(uid);
-  console.log(uid);
+
   let [user] = useDocumentData(userRef);
   let scores = user?.score;
+  
+  console.log(uid);
   console.log(user, user?.score);
-  console.log(Math.max(...user?.score));
+  console.log(Math.max(user?.score));
 
-  function reset() {
+  const reset = () => {
     setLives(3);
     return setScore(0);
   }
@@ -110,13 +111,13 @@ export default function Game() {
             </div>
             <Card.Body>
               <p>Score: {score}</p>
-              <p>Highscore: {Math.max(...user?.score)} </p>
+              <p>Highscore: {user && user.score && Math.max(...user?.score)} </p>
               <p>Lives: {lives}</p>
             </Card.Body>
           </>
         ) : (
           <>
-            <h1 className='mt-3'>You Died!</h1>
+            <h1 className="mt-3">You Died!</h1>
             <h3>Score: {score}</h3>
             <Button className="btn-highlight btn mb-3" onClick={reset}>
               Play Again?

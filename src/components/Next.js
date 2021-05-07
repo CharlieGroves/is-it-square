@@ -19,7 +19,7 @@ export default function Next() {
   const { updateDisplayName, currentUser } = useAuth();
   const history = useHistory();
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     if (!currentUser) return history.push("/login");
 
     e.preventDefault();
@@ -49,7 +49,7 @@ export default function Next() {
     }
 
     const { uid, displayName } = auth.currentUser;
-    const userRef = firestore.collection("users");
+    const userRef = firestore.collection("scores");
 
     await userRef.doc(uid).set({
       scores: []
