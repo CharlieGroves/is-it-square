@@ -77,7 +77,7 @@ export default function Game() {
   };
 
   useEffect(async () => {
-    if (lives === 0) {
+    if (lives <= 0) {
       scores.push(score);
       await userRef.update({
         score: scores,
