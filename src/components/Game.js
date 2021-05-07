@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, CardDeck } from "react-bootstrap";
+import { Card, Button, Table } from "react-bootstrap";
 import CardContainer from "./Container";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import { useDocumentData } from "react-firebase-hooks/firestore";
+import {
+  useDocumentData,
+  useCollectionData,
+} from "react-firebase-hooks/firestore";
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
@@ -32,11 +35,18 @@ export default function Game() {
   const [lives, setLives] = useState(3);
   const [dead, setDead] = useState(false);
   const { uid, email, displayName } = auth.currentUser;
+
   const userRef = firestore.collection("scores").doc(uid);
+  const leaderboardRef = firestore.collection("leaderboard");
+  const leaderboardQuery = leaderboardRef.orderBy("score", "desc").limit(10);
+
+  let [leaderboard] = useCollectionData(leaderboardQuery);
+
+  leaderboard && console.log(leaderboard);
 
   let [user] = useDocumentData(userRef);
   let scores = user?.score;
-  
+
   console.log(uid);
   console.log(user, user?.score);
   console.log(Math.max(user?.score));
@@ -44,7 +54,7 @@ export default function Game() {
   const reset = () => {
     setLives(3);
     return setScore(0);
-  }
+  };
 
   const yes = () => {
     if (!isSquare(randomNumber)) {
@@ -71,6 +81,10 @@ export default function Game() {
       scores.push(score);
       await userRef.update({
         score: scores,
+      });
+      leaderboardRef.add({
+        displayName: displayName,
+        score: score,
       });
       return setDead(true);
     }
@@ -111,9 +125,26 @@ export default function Game() {
             </div>
             <Card.Body>
               <p>Score: {score}</p>
-              <p>Highscore: {user && user.score && Math.max(...user?.score)} </p>
+              <p>
+                Highscore: {user && user.score && Math.max(...user?.score)}{" "}
+              </p>
               <p>Lives: {lives}</p>
             </Card.Body>
+            <Table style={{ width: "90%", marginLeft: '5%', marginRight: '5%'}} variant="dark">
+              <thead>
+                <th>Username</th>
+                <th>Score</th>
+              </thead>
+              <tbody>
+                {leaderboard &&
+                  leaderboard.map((foo) => (
+                    <tr key={foo.id}>
+                      <td>{foo.displayName}</td>
+                      <td>{foo.score}</td>
+                    </tr>
+                  ))}{" "}
+              </tbody>
+            </Table>
           </>
         ) : (
           <>
