@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Table } from "react-bootstrap";
-import CardContainer from "./Container";
+import CardContainer from "./GameContainer";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -18,10 +18,7 @@ function newRandom() {
   let rand = Math.floor(Math.random() * 100);
   if (rand >= 50) {
     temp += Math.floor(Math.random() * 10);
-    console.log("yes");
-  } else {
-    console.log("no");
-  }
+  } else {}
   return temp;
 }
 
@@ -34,22 +31,16 @@ export default function Game() {
   const [randomNumber, setRandomNumber] = useState(newRandom());
   const [lives, setLives] = useState(3);
   const [dead, setDead] = useState(false);
-  const { uid, email, displayName } = auth.currentUser;
+  const { uid, displayName } = auth.currentUser;
 
   const userRef = firestore.collection("scores").doc(uid);
   const leaderboardRef = firestore.collection("leaderboard");
   const leaderboardQuery = leaderboardRef.orderBy("score", "desc").limit(10);
 
-  let [leaderboard] = useCollectionData(leaderboardQuery);
-
-  leaderboard && console.log(leaderboard);
+  let [leaderboard] = useCollectionData(leaderboardQuery);;
 
   let [user] = useDocumentData(userRef);
   let scores = user?.score;
-
-  console.log(uid);
-  console.log(user, user?.score);
-  console.log(Math.max(user?.score));
 
   const reset = () => {
     setLives(3);
@@ -76,20 +67,23 @@ export default function Game() {
     }
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     if (lives <= 0) {
       scores.push(score);
-      await userRef.update({
-        score: scores,
-      });
-      leaderboardRef.add({
-        displayName: displayName,
-        score: score,
-      });
+      async function updateScores() {
+        await userRef.update({
+          score: scores,
+        });
+        leaderboardRef.add({
+          displayName: displayName,
+          score: score,
+        });
+      }
+      updateScores()
       return setDead(true);
     }
     return setDead(false);
-  }, [lives]);
+  }, [lives, score, scores, displayName, leaderboardRef, userRef]);
 
   return (
     <CardContainer>
@@ -130,7 +124,10 @@ export default function Game() {
               </p>
               <p>Lives: {lives}</p>
             </Card.Body>
-            <Table style={{ width: "90%", marginLeft: '5%', marginRight: '5%'}} variant="dark">
+            <Table
+              style={{ minWidth: "50%", maxWidth: '75%', marginLeft: "5%", marginRight: "5%" }}
+              variant="dark"
+            >
               <thead>
                 <th>Username</th>
                 <th>Score</th>

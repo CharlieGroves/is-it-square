@@ -48,7 +48,7 @@ export default function Next() {
       setLoading(false);
     }
 
-    const { uid, displayName } = auth.currentUser;
+    const { uid } = auth.currentUser;
     const userRef = firestore.collection("scores");
 
     await userRef.doc(uid).set({
