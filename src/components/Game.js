@@ -71,7 +71,7 @@ export default function Game() {
     await userRef.update({
       score: scores,
     });
-    leaderboardRef.add({
+    await leaderboardRef.add({
       displayName: displayName,
       score: score,
     });
@@ -84,7 +84,7 @@ export default function Game() {
       return setDead(true);
     }
     return setDead(false);
-  }, [lives, score, scores, displayName, leaderboardRef, userRef]);
+  }, [lives, score]);
 
   return (
     <CardContainer>
