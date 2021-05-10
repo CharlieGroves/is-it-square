@@ -67,18 +67,19 @@ export default function Game() {
     }
   };
 
+  async function updateScores() {
+    await userRef.update({
+      score: scores,
+    });
+    leaderboardRef.add({
+      displayName: displayName,
+      score: score,
+    });
+  }
+
   useEffect(() => {
     if (lives <= 0) {
       scores.push(score);
-      async function updateScores() {
-        await userRef.update({
-          score: scores,
-        });
-        leaderboardRef.add({
-          displayName: displayName,
-          score: score,
-        });
-      }
       updateScores()
       return setDead(true);
     }
