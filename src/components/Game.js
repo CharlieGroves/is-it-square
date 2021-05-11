@@ -69,11 +69,11 @@ export default function Game() {
 
   async function updateScores() {
     await userRef.update({
-      scores: scores,
+      score: scores,
     });
     await leaderboardRef.add({
       displayName: displayName,
-      scores: score,
+      score: score,
     });
   }
 
