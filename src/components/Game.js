@@ -37,10 +37,10 @@ export default function Game() {
   const leaderboardRef = firestore.collection("leaderboard");
   const leaderboardQuery = leaderboardRef.orderBy("score", "desc").limit(10);
 
-  let [leaderboard] = useCollectionData(leaderboardQuery);;
+  let [leaderboard] = useCollectionData(leaderboardQuery);
 
   let [user] = useDocumentData(userRef);
-  let scores = user?.score;
+  let scores = user?.scores;
 
   const reset = () => {
     setLives(3);
@@ -121,7 +121,7 @@ export default function Game() {
             <Card.Body>
               <p>Score: {score}</p>
               <p>
-                Highscore: {user && user.score && Math.max(...user?.score)}{" "}
+                Highscore: {user && user.scores && Math.max(...user?.scores)}{" "}
               </p>
               <p>Lives: {lives}</p>
             </Card.Body>
