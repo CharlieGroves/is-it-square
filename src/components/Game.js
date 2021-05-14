@@ -18,10 +18,7 @@ const firestore = firebase.firestore();
 function newRandom() {
   let temp = Math.floor(Math.random() * 15) ** 2;
   let rand = Math.floor(Math.random() * 100);
-  if (rand >= 50) {
-    temp += Math.floor(Math.random() * 10);
-  } else {
-  }
+  if (rand >= 50) temp += Math.floor(Math.random() * 10);
   return temp;
 }
 
