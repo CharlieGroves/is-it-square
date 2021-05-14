@@ -44,8 +44,8 @@ export default function Game() {
       history.push("/login");
     } catch {
       setError("Failed to log out");
-    }
-  }
+    };
+  };
 
   const LogoutButton = () => {
     return (
