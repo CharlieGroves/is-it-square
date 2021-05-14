@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Table, Alert } from "react-bootstrap";
 import CardContainer from "./GameContainer";
 import { useAuth } from "../context/AuthContext";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
