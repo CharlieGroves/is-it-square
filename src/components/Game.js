@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Table } from "react-bootstrap";
+import { Card, Button, Table, Alert } from "react-bootstrap";
 import CardContainer from "./GameContainer";
+import { useAuth } from "../context/AuthContext";
+import { Link, useHistory } from 'react-router-dom';
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -18,7 +20,8 @@ function newRandom() {
   let rand = Math.floor(Math.random() * 100);
   if (rand >= 50) {
     temp += Math.floor(Math.random() * 10);
-  } else {}
+  } else {
+  }
   return temp;
 }
 
@@ -27,11 +30,25 @@ function isSquare(n) {
 }
 
 export default function Game() {
+  const history = useHistory();
+  const { logout } = useAuth();
   const [score, setScore] = useState(0);
   const [randomNumber, setRandomNumber] = useState(newRandom());
   const [lives, setLives] = useState(3);
   const [dead, setDead] = useState(false);
+  const [error, setError] = useState("");
   const { uid, displayName } = auth.currentUser;
+
+  async function handleLogout() {
+    setError("");
+
+    try {
+      await logout();
+      history.push("/login");
+    } catch {
+      setError("Failed to log out");
+    }
+  }
 
   const userRef = firestore.collection("scores").doc(uid);
   const leaderboardRef = firestore.collection("leaderboard");
@@ -80,7 +97,7 @@ export default function Game() {
   useEffect(() => {
     if (lives <= 0) {
       scores.push(score);
-      updateScores()
+      updateScores();
       return setDead(true);
     }
     return setDead(false);
@@ -126,7 +143,12 @@ export default function Game() {
               <p>Lives: {lives}</p>
             </Card.Body>
             <Table
-              style={{ minWidth: "50%", maxWidth: '75%', marginLeft: "5%", marginRight: "5%" }}
+              style={{
+                minWidth: "50%",
+                maxWidth: "75%",
+                marginLeft: "5%",
+                marginRight: "5%",
+              }}
               variant="dark"
             >
               <thead>
@@ -143,6 +165,16 @@ export default function Game() {
                   ))}{" "}
               </tbody>
             </Table>
+            <div className="w-100 text-center mt-3 mb-3">
+              <Button
+                varient="link"
+                className="btn-highlight"
+                onClick={handleLogout}
+              >
+                Log Out
+              </Button>
+            </div>
+            {error && <Alert varient="danger">{error}</Alert>}
           </>
         ) : (
           <>
@@ -151,6 +183,16 @@ export default function Game() {
             <Button className="btn-highlight btn mb-3" onClick={reset}>
               Play Again?
             </Button>
+            <div className="w-100 text-center mt-3 mb-3">
+              <Button
+                varient="link"
+                className="btn-highlight"
+                onClick={handleLogout}
+              >
+                Log Out
+              </Button>
+            </div>
+            {error && <Alert varient="danger">{error}</Alert>}
           </>
         )}
       </Card>
