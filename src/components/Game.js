@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Table, Alert } from "react-bootstrap";
 import CardContainer from "./GameContainer";
 import { useAuth } from "../context/AuthContext";
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory } from "react-router-dom";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -49,6 +49,19 @@ export default function Game() {
       setError("Failed to log out");
     }
   }
+
+  const LogoutButton = () => {
+    return (
+      <>
+        <div className="w-100 text-center mt-3 mb-3">
+          <Button varient="link" className="btn-highlight" onClick={handleLogout}>
+            Log Out
+          </Button>
+        </div>
+        {error && <Alert varient="danger">{error}</Alert>}
+      </>
+    );
+  };
 
   const userRef = firestore.collection("scores").doc(uid);
   const leaderboardRef = firestore.collection("leaderboard");
@@ -165,16 +178,7 @@ export default function Game() {
                   ))}{" "}
               </tbody>
             </Table>
-            <div className="w-100 text-center mt-3 mb-3">
-              <Button
-                varient="link"
-                className="btn-highlight"
-                onClick={handleLogout}
-              >
-                Log Out
-              </Button>
-            </div>
-            {error && <Alert varient="danger">{error}</Alert>}
+            <LogoutButton />
           </>
         ) : (
           <>
@@ -183,19 +187,12 @@ export default function Game() {
             <Button className="btn-highlight btn mb-3" onClick={reset}>
               Play Again?
             </Button>
-            <div className="w-100 text-center mt-3 mb-3">
-              <Button
-                varient="link"
-                className="btn-highlight"
-                onClick={handleLogout}
-              >
-                Log Out
-              </Button>
-            </div>
-            {error && <Alert varient="danger">{error}</Alert>}
+            <LogoutButton />
           </>
         )}
       </Card>
     </CardContainer>
   );
 }
+
+
