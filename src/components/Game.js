@@ -11,6 +11,7 @@ import {
   useDocumentData,
   useCollectionData,
 } from "react-firebase-hooks/firestore";
+import Loading from "./Loading";
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
@@ -34,6 +35,7 @@ export default function Game() {
   const [lives, setLives] = useState(3);
   const [dead, setDead] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const { uid, displayName } = auth.currentUser;
 
   async function handleLogout() {
@@ -44,14 +46,18 @@ export default function Game() {
       history.push("/login");
     } catch {
       setError("Failed to log out");
-    };
-  };
+    }
+  }
 
   const LogoutButton = () => {
     return (
       <>
         <div className="w-100 text-center mt-3 mb-3">
-          <Button varient="link" className="btn-highlight" onClick={handleLogout}>
+          <Button
+            varient="link"
+            className="btn-highlight"
+            onClick={handleLogout}
+          >
             Log Out
           </Button>
         </div>
@@ -152,29 +158,34 @@ export default function Game() {
               </p>
               <p>Lives: {lives}</p>
             </Card.Body>
-            <Table
-              style={{
-                minWidth: "50%",
-                maxWidth: "75%",
-                marginLeft: "5%",
-                marginRight: "5%",
-              }}
-              variant="dark"
-            >
-              <thead>
-                <th>Username</th>
-                <th>Score</th>
-              </thead>
-              <tbody>
-                {leaderboard &&
-                  leaderboard.map((foo) => (
+            {leaderboard ? (
+              <>
+                <Table
+                  style={{
+                    minWidth: "50%",
+                    maxWidth: "75%",
+                    marginLeft: "5%",
+                    marginRight: "5%",
+                  }}
+                  variant="dark"
+                >
+                  <thead>
+                    <th>Username</th>
+                    <th>Score</th>
+                  </thead>
+                  <tbody>
+                    {leaderboard.map((foo) => (
                     <tr key={foo.id}>
                       <td>{foo.displayName}</td>
                       <td>{foo.score}</td>
                     </tr>
-                  ))}{" "}
-              </tbody>
-            </Table>
+                    ))}
+                  </tbody>
+                </Table>
+              </>
+            ) : (
+              <Loading />
+            )}
             <LogoutButton />
           </>
         ) : (
@@ -191,5 +202,3 @@ export default function Game() {
     </CardContainer>
   );
 }
-
-
