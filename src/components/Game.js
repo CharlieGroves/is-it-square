@@ -72,7 +72,6 @@ export default function Game() {
   const leaderboardQuery = leaderboardRef.orderBy("score", "desc").limit(10);
   const highscoreQuery = userRef.orderBy('score').limitToLast(1)
   let [highscore] = useCollectionData(highscoreQuery);
-  console.log(highscore && highscore[0])
   let [leaderboard] = useCollectionData(leaderboardQuery);
 
   let [user] = useDocumentData(userRef);
@@ -180,8 +179,8 @@ export default function Game() {
                   <tbody>
                     {leaderboard.map((foo) => (
                     <tr key={foo.id}>
-                      <td>{foo.displayName}</td>
-                      <td>{foo.score}</td>
+                      <td key={1}>{foo.displayName}</td>
+                      <td key={2}>{foo.score}</td>
                     </tr>
                     ))}
                   </tbody>
