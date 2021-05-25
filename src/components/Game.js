@@ -10,6 +10,7 @@ import "firebase/auth";
 import {
   useDocumentData,
   useCollectionData,
+  useCollection,
 } from "react-firebase-hooks/firestore";
 import Loading from "./Loading";
 
@@ -66,10 +67,12 @@ export default function Game() {
     );
   };
 
-  const userRef = firestore.collection("scores").doc(uid);
+  const userRef = firestore.collection("scores").doc(uid).collection("scores");
   const leaderboardRef = firestore.collection("leaderboard");
   const leaderboardQuery = leaderboardRef.orderBy("score", "desc").limit(10);
-
+  const highscoreQuery = userRef.orderBy('score').limitToLast(1)
+  let [highscore] = useCollectionData(highscoreQuery);
+  console.log(highscore && highscore[0])
   let [leaderboard] = useCollectionData(leaderboardQuery);
 
   let [user] = useDocumentData(userRef);
@@ -101,18 +104,19 @@ export default function Game() {
   };
 
   async function updateScores() {
-    await userRef.update({
-      scores: scores,
+    await userRef.add({
+      score: score,
+      time: firebase.firestore.FieldValue.serverTimestamp(),
     });
     await leaderboardRef.add({
       displayName: displayName,
       score: score,
+      time: firebase.firestore.FieldValue.serverTimestamp(),
     });
   }
 
   useEffect(() => {
     if (lives <= 0) {
-      scores.push(score);
       updateScores();
       return setDead(true);
     }
@@ -154,7 +158,7 @@ export default function Game() {
             <Card.Body>
               <p>Score: {score}</p>
               <p>
-                Highscore: {user && user.scores && Math.max(...user?.scores)}{" "}
+                Highscore: { highscore && highscore[0]?.score }{" "}
               </p>
               <p>Lives: {lives}</p>
             </Card.Body>
