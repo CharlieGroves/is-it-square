@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Table, Alert } from "react-bootstrap";
 import CardContainer from "./GameContainer";
 import { useAuth } from "../context/AuthContext";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -70,7 +70,7 @@ export default function Game() {
   const userRef = firestore.collection("scores").doc(uid).collection("scores");
   const leaderboardRef = firestore.collection("leaderboard");
   const leaderboardQuery = leaderboardRef.orderBy("score", "desc").limit(10);
-  const highscoreQuery = userRef.orderBy('score').limitToLast(1)
+  const highscoreQuery = userRef.orderBy("score").limitToLast(1);
   let [highscore] = useCollectionData(highscoreQuery);
   let [leaderboard] = useCollectionData(leaderboardQuery);
 
@@ -111,6 +111,7 @@ export default function Game() {
       displayName: displayName,
       score: score,
       time: firebase.firestore.FieldValue.serverTimestamp(),
+      id: uid,
     });
   }
 
@@ -156,9 +157,7 @@ export default function Game() {
             </div>
             <Card.Body>
               <p>Score: {score}</p>
-              <p>
-                Highscore: { highscore && highscore[0]?.score }{" "}
-              </p>
+              <p>Highscore: {highscore && highscore[0]?.score} </p>
               <p>Lives: {lives}</p>
             </Card.Body>
             {leaderboard ? (
@@ -178,10 +177,15 @@ export default function Game() {
                   </thead>
                   <tbody>
                     {leaderboard.map((foo) => (
-                    <tr key={foo.id}>
-                      <td key={1}>{foo.displayName}</td>
-                      <td key={2}>{foo.score}</td>
-                    </tr>
+                      <tr key={foo.id}>
+                        <Link
+                          style={{ color: 'inherit', textDecoration: 'inherit'}}
+                          to={`/profile/${foo.id}`}
+                        >
+                          <td style={{ color: 'inherit', textDecoration: 'inherit'}} key={1}>{foo.displayName}</td>
+                        </Link>
+                        <td key={2}>{foo.score}</td>
+                      </tr>
                     ))}
                   </tbody>
                 </Table>
