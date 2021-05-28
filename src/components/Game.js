@@ -143,7 +143,7 @@ export default function Game() {
                 className="btn btn-highlight"
                 onClick={yes}
                 disabled={dead}
-              >
+              > 
                 Yes
               </Button>
               <Button
