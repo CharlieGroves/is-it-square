@@ -17,12 +17,7 @@ import Loading from "./Loading";
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-function newRandom() {
-  let temp = Math.floor(Math.random() * 15) ** 2;
-  let rand = Math.floor(Math.random() * 100);
-  if (rand >= 50) temp += Math.floor(Math.random() * 10);
-  return temp;
-}
+
 
 function isSquare(n) {
   return n > 0 && Math.sqrt(n) % 1 === 0;
@@ -32,12 +27,22 @@ export default function Game() {
   const history = useHistory();
   const { logout } = useAuth();
   const [score, setScore] = useState(0);
-  const [randomNumber, setRandomNumber] = useState(newRandom());
   const [lives, setLives] = useState(3);
+  const [bound, setBound] = useState(15)
+  const [randomNumber, setRandomNumber] = useState(newRandom());
   const [dead, setDead] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const { uid, displayName } = auth.currentUser;
+
+  function newRandom(score) {
+    score > 15 && (setBound(score));
+    console.log(bound)
+    let temp = Math.floor(Math.random() * bound) ** 2;
+    let rand = Math.floor(Math.random() * 100);
+    if (rand >= 50) temp += Math.floor(Math.random() * 10);
+    return temp;
+  }
 
   async function handleLogout() {
     setError("");
@@ -84,10 +89,10 @@ export default function Game() {
 
   const yes = () => {
     if (!isSquare(randomNumber)) {
-      setRandomNumber(newRandom());
+      setRandomNumber(newRandom(score));
       return setLives(lives - 1);
     } else {
-      setRandomNumber(newRandom());
+      setRandomNumber(newRandom(score));
       return setScore(score + 1);
     }
   };
