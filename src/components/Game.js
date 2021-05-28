@@ -8,7 +8,6 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import {
-  useDocumentData,
   useCollectionData,
 } from "react-firebase-hooks/firestore";
 import Loading from "./Loading";
