@@ -52,7 +52,8 @@ export default function Next() {
     const userRef = firestore.collection("scores");
 
     await userRef.doc(uid).set({
-      scores: []
+      username: displayNameRef.current.value,
+      id: uid
     });
 
     setLoading(false);
