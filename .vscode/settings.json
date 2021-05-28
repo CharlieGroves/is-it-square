@@ -1,0 +1,7 @@
+{
+    "editor.codeActionsOnSave": null,
+    "remote.WSL.fileWatcher.polling": true,
+    "files.watcherExclude": {
+        "**/.git/**": true
+    }
+}

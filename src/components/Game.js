@@ -10,14 +10,11 @@ import "firebase/auth";
 import {
   useDocumentData,
   useCollectionData,
-  useCollection,
 } from "react-firebase-hooks/firestore";
 import Loading from "./Loading";
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
-
-
 
 function isSquare(n) {
   return n > 0 && Math.sqrt(n) % 1 === 0;
@@ -28,16 +25,15 @@ export default function Game() {
   const { logout } = useAuth();
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
-  const [bound, setBound] = useState(15)
+  const [bound, setBound] = useState(15);
   const [randomNumber, setRandomNumber] = useState(newRandom());
   const [dead, setDead] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
   const { uid, displayName } = auth.currentUser;
 
   function newRandom(score) {
-    score > 15 && (setBound(score));
-    console.log(bound)
+    score > 15 && setBound(score);
+    console.log(bound);
     let temp = Math.floor(Math.random() * bound) ** 2;
     let rand = Math.floor(Math.random() * 100);
     if (rand >= 50) temp += Math.floor(Math.random() * 10);
@@ -74,13 +70,12 @@ export default function Game() {
 
   const userRef = firestore.collection("scores").doc(uid).collection("scores");
   const leaderboardRef = firestore.collection("leaderboard");
+
   const leaderboardQuery = leaderboardRef.orderBy("score", "desc").limit(10);
   const highscoreQuery = userRef.orderBy("score").limitToLast(1);
+
   let [highscore] = useCollectionData(highscoreQuery);
   let [leaderboard] = useCollectionData(leaderboardQuery);
-
-  let [user] = useDocumentData(userRef);
-  let scores = user?.scores;
 
   const reset = () => {
     setLives(3);
@@ -184,10 +179,21 @@ export default function Game() {
                     {leaderboard.map((foo) => (
                       <tr key={foo.id}>
                         <Link
-                          style={{ color: 'inherit', textDecoration: 'inherit'}}
+                          style={{
+                            color: "inherit",
+                            textDecoration: "inherit",
+                          }}
                           to={`/profile/${foo.id}`}
                         >
-                          <td style={{ color: 'inherit', textDecoration: 'inherit'}} key={1}>{foo.displayName}</td>
+                          <td
+                            style={{
+                              color: "inherit",
+                              textDecoration: "inherit",
+                            }}
+                            key={1}
+                          >
+                            {foo.displayName}
+                          </td>
                         </Link>
                         <td key={2}>{foo.score}</td>
                       </tr>
