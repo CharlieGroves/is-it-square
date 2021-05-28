@@ -32,7 +32,6 @@ export default function Game() {
 
   function newRandom(score) {
     score > 15 && setBound(score);
-    console.log(bound);
     let temp = Math.floor(Math.random() * bound) ** 2;
     let rand = Math.floor(Math.random() * 100);
     if (rand >= 50) temp += Math.floor(Math.random() * 10);
