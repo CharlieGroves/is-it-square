@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Table, Alert } from "react-bootstrap";
+
 import CardContainer from "./GameContainer";
 import { useAuth } from "../context/AuthContext";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import {
-  useCollectionData,
-} from "react-firebase-hooks/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import Loading from "./Loading";
 
 const auth = firebase.auth();
@@ -90,6 +89,10 @@ export default function Game() {
     }
   };
 
+  function handleRedirect(id) {
+    history.push(`/profile/${id}`);
+  }
+
   const no = () => {
     if (isSquare(randomNumber)) {
       setRandomNumber(newRandom());
@@ -142,7 +145,7 @@ export default function Game() {
                 className="btn btn-highlight"
                 onClick={yes}
                 disabled={dead}
-              > 
+              >
                 Yes
               </Button>
               <Button
@@ -171,29 +174,20 @@ export default function Game() {
                   variant="dark"
                 >
                   <thead>
-                    <th>Username</th>
-                    <th>Score</th>
+                    <tr>
+                      <th>Username</th>
+                      <th>Score</th>
+                    </tr>
                   </thead>
                   <tbody>
                     {leaderboard.map((foo) => (
                       <tr key={foo.id}>
-                        <Link
-                          style={{
-                            color: "inherit",
-                            textDecoration: "inherit",
-                          }}
-                          to={`/profile/${foo.id}`}
+                        <td
+                          key={1}
+                          onClick={handleRedirect(foo.id)}
                         >
-                          <td
-                            style={{
-                              color: "inherit",
-                              textDecoration: "inherit",
-                            }}
-                            key={1}
-                          >
-                            {foo.displayName}
-                          </td>
-                        </Link>
+                          {foo.displayName}
+                        </td>
                         <td key={2}>{foo.score}</td>
                       </tr>
                     ))}
