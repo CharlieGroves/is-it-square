@@ -119,6 +119,7 @@ export default function Game() {
       return setDead(true);
     }
     return setDead(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lives, score]);
 
   return (
